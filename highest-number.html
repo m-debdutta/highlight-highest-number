@@ -19,6 +19,8 @@
       const createNumberElement = (number) => {
         const numberElement = document.createElement("li");
         numberElement.innerText = number;
+        numberElement.classList.add("number" + number);
+
         return numberElement;
       };
 
@@ -28,18 +30,25 @@
         containerElement.appendChild(numberElement);
       };
 
+      const generateClassName = (maxNumber) => ".number" + maxNumber.toString()
+
       const endOfInputs = (numbers) => {
         const maxNumber = Math.max(...numbers);
-        console.log(maxNumber);
+        const className = generateClassName(maxNumber);
+        
+        const elementToHighlight = document.querySelector(className);
+        elementToHighlight.classList.add("highlight");
       };
 
       const main = ([...numbers]) => {
         delayedPrompt((number) => {
           addNumberToRenderList(number);
+
           if (numbers.length === 9) {
             endOfInputs(numbers);
             return;
           }
+
           main([...numbers, number]);
         });
       };
