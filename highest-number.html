@@ -23,38 +23,42 @@
         return numberElement;
       };
 
-      const addNumberToRenderList = (number) => {
+      const addNumberToRenderList = (numberElement) => {
         const containerElement = getContainerElement();
-        const numberElement = createNumberElement(number);
         containerElement.appendChild(numberElement);
       };
 
-      const determineHighlightNumberAndHighlight = (numbers) => {
-        const maxNumber = Math.max(...numbers);
-        const indexOfMaxNumber = numbers.indexOf(maxNumber);
-              
-        const containerElement = getContainerElement();
-        const elementToHighlight = containerElement.childNodes[indexOfMaxNumber];
-        
-        elementToHighlight.classList.add("highlight");
+      const decideMaxNumberElement = (previousElement, currentElement) => {
+        const previousNumber = Number(previousElement.innerText);
+        const currentNumber = Number(currentElement.innerText);
+
+        return previousNumber < currentNumber
+          ? currentElement
+          : previousElement;
       };
 
-      const highlightHighestNumber = ([...numbers]) => {
-        delayedPrompt((number) => {
-          addNumberToRenderList(number);
+      const determineHighlightNumberAndHighlight = (numberElements) => {
+        const maxNumberElement = numberElements.reduce(decideMaxNumberElement);
+        maxNumberElement.classList.add("highlight");
+      };
 
-          if (numbers.length === 9) {
-            determineHighlightNumberAndHighlight(numbers);
+      const highlightHighestNumber = ([...numberElements]) => {
+        delayedPrompt((number) => {
+          const numberElement = createNumberElement(number);
+          addNumberToRenderList(numberElement);
+
+          if (numberElements.length === 9) {
+            determineHighlightNumberAndHighlight(numberElements);
             return;
           }
 
-          highlightHighestNumber([...numbers, number]);
+          highlightHighestNumber([...numberElements, numberElement]);
         });
       };
 
       const main = () => {
-        const numbers = [];
-        highlightHighestNumber(numbers);
+        const numberElements = [];
+        highlightHighestNumber(numberElements);
       };
 
       window.onload = main;
