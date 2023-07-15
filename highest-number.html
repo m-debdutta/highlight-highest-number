@@ -10,7 +10,7 @@
       const delayedPrompt = (cb) => {
         setTimeout(() => {
           const number = prompt("Enter a number");
-          cb(Number(number));
+          cb(parseInt(number));
         }, 100);
       };
 
@@ -23,36 +23,36 @@
         return numberElement;
       };
 
-      const addNumberToRenderList = (numberElement) => {
+      const addToNumbers = (numberElement) => {
         const containerElement = getContainerElement();
         containerElement.appendChild(numberElement);
       };
 
       const decideMaxNumberElement = (previousElement, currentElement) => {
-        const previousNumber = Number(previousElement.innerText);
-        const currentNumber = Number(currentElement.innerText);
+        const previousNumber = parseInt(previousElement.innerText);
+        const currentNumber = parseInt(currentElement.innerText);
 
         return previousNumber < currentNumber
           ? currentElement
           : previousElement;
       };
 
-      const determineHighlightNumberAndHighlight = (numberElements) => {
+      const determineHighestNumberAndHighlight = (numberElements) => {
         const maxNumberElement = numberElements.reduce(decideMaxNumberElement);
         maxNumberElement.classList.add("highlight");
       };
 
       const highlightHighestNumber = ([...numberElements]) => {
         delayedPrompt((number) => {
-          const numberElement = createNumberElement(number);
-          addNumberToRenderList(numberElement);
+          const number = createNumberElement(number);
+          addToNumbers(number);
 
           if (numberElements.length === 9) {
-            determineHighlightNumberAndHighlight(numberElements);
+            determineHighestNumberAndHighlight(numberElements);
             return;
           }
 
-          highlightHighestNumber([...numberElements, numberElement]);
+          highlightHighestNumber([...numberElements, number]);
         });
       };
 
