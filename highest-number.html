@@ -7,7 +7,9 @@
       const number = prompt('Enter a number');
       cb(ParseInt(number));
     };
-    
+  
+    const getContainerElement = () => document.querySelector('#container ul');
+
     const addNumberToRenderList = (number) => {
       const containerElement = getContainerElement();
       const numberElement = createNumberElement();
