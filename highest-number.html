@@ -10,7 +10,7 @@
       const delayedPrompt = (cb) => {
         setTimeout(() => {
           const number = prompt("Enter a number");
-          cb(parseInt(number));
+          cb(parseInt(number) || 0);
         }, 100);
       };
 
@@ -23,7 +23,7 @@
         return numberElement;
       };
 
-      const addToNumbers = (numberElement) => {
+      const addToContainer = (numberElement) => {
         const containerElement = getContainerElement();
         containerElement.appendChild(numberElement);
       };
@@ -44,15 +44,15 @@
 
       const highlightHighestNumber = ([...numberElements]) => {
         delayedPrompt((number) => {
-          const number = createNumberElement(number);
-          addToNumbers(number);
+          const numberElement = createNumberElement(number);
+          addToContainer(numberElement);
 
           if (numberElements.length === 9) {
             determineHighestNumberAndHighlight(numberElements);
             return;
           }
 
-          highlightHighestNumber([...numberElements, number]);
+          highlightHighestNumber([...numberElements, numberElement]);
         });
       };
 
