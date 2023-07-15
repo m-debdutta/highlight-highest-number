@@ -5,7 +5,7 @@
 
     const delayedPrompt = (cb) => {
       const number = prompt('Enter a number');
-      cb(ParseInt(number));
+      cb(Number(number));
     };
   
     const getContainerElement = () => document.querySelector('#container ul');
