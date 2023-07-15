@@ -2,14 +2,21 @@
 <head>
   <title>highest number</title>
   <script>
+
     const delayedPrompt = (cb) => {
       const number = prompt('Enter a number');
-      cb(number);
+      cb(ParseInt(number));
     };
     
+    const addNumberToRenderList = (number) => {
+      const containerElement = getContainerElement();
+      const numberElement = createNumberElement();
+      containerElement.appendChild(numberElement);
+    };
+
     const main = () => {
       delayedPrompt((number) => {
-        console.log(number);
+        addNumberToRenderList(number);
       });
     };
 
@@ -19,7 +26,10 @@
 <body>
   <section id="page">
     <header>Highlight the highest number</header>
-    <main></main>
+    <main id="container">
+      <ul>
+      </ul>
+    </main>
   </section>
 </body>
 </html>
