@@ -1,43 +1,49 @@
 <html>
-<head>
-  <title>highest number</title>
-  <script>
+  <head>
+    <title>highest number</title>
+    <script>
+      const delayedPrompt = (cb) => {
+        setTimeout(() => {
+          const number = prompt("Enter a number");
+          cb(Number(number));
+        }, 100);
+      };
 
-    const delayedPrompt = (cb) => {
-      const number = prompt('Enter a number');
-      cb(Number(number));
-    };
-  
-    const getContainerElement = () => document.querySelector('#container ul');
+      const getContainerElement = () => document.querySelector("#container ul");
+      
+      const createNumberElement = (number) => {
+        const numberElement = document.createElement("li");
+        numberElement.innerText = number;
+        return numberElement;
+      };
+      
+      const addNumberToRenderList = (number) => {
+        const containerElement = getContainerElement();
+        const numberElement = createNumberElement(number);
+        containerElement.appendChild(numberElement);
+      };
 
-    const createNumberElement = (number) => {
-      const numberElement = document.createElement('li');
-      numberElement.innerText = number;
-      return numberElement;
-    };
+      const main = ([...numbers]) => {
+        delayedPrompt((number) => {
+          addNumberToRenderList(number);
+          if(numbers.length === 9) return;
+          main([...numbers, number]);
+        });
+      };
 
-    const addNumberToRenderList = (number) => {
-      const containerElement = getContainerElement();
-      const numberElement = createNumberElement(number);
-      containerElement.appendChild(numberElement);
-    };
+      window.onload = () => {
+        const numbers = [];
+        main(numbers);
+      }
 
-    const main = () => {
-      delayedPrompt((number) => {
-        addNumberToRenderList(number);
-      });
-    };
-
-    window.onload = () => main();
-  </script>
-</head>
-<body>
-  <section id="page">
-    <header>Highlight the highest number</header>
-    <main id="container">
-      <ul>
-      </ul>
-    </main>
-  </section>
-</body>
+    </script>
+  </head>
+  <body>
+    <section id="page">
+      <header>Highlight the highest number</header>
+      <main id="container">
+        <ul></ul>
+      </main>
+    </section>
+  </body>
 </html>
