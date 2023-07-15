@@ -10,9 +10,15 @@
   
     const getContainerElement = () => document.querySelector('#container ul');
 
+    const createNumberElement = (number) => {
+      const numberElement = document.createElement('li');
+      numberElement.innerText = number;
+      return numberElement;
+    };
+
     const addNumberToRenderList = (number) => {
       const containerElement = getContainerElement();
-      const numberElement = createNumberElement();
+      const numberElement = createNumberElement(number);
       containerElement.appendChild(numberElement);
     };
 
