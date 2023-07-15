@@ -1,6 +1,11 @@
 <html>
   <head>
     <title>highest number</title>
+    <style>
+      .highlight {
+        background-color: red;
+      }
+    </style>
     <script>
       const delayedPrompt = (cb) => {
         setTimeout(() => {
@@ -10,23 +15,31 @@
       };
 
       const getContainerElement = () => document.querySelector("#container ul");
-      
+
       const createNumberElement = (number) => {
         const numberElement = document.createElement("li");
         numberElement.innerText = number;
         return numberElement;
       };
-      
+
       const addNumberToRenderList = (number) => {
         const containerElement = getContainerElement();
         const numberElement = createNumberElement(number);
         containerElement.appendChild(numberElement);
       };
 
+      const endOfInputs = (numbers) => {
+        const maxNumber = Math.max(...numbers);
+        console.log(maxNumber);
+      };
+
       const main = ([...numbers]) => {
         delayedPrompt((number) => {
           addNumberToRenderList(number);
-          if(numbers.length === 9) return;
+          if (numbers.length === 9) {
+            endOfInputs(numbers);
+            return;
+          }
           main([...numbers, number]);
         });
       };
@@ -34,8 +47,7 @@
       window.onload = () => {
         const numbers = [];
         main(numbers);
-      }
-
+      };
     </script>
   </head>
   <body>
