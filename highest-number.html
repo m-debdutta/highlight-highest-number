@@ -19,7 +19,6 @@
       const createNumberElement = (number) => {
         const numberElement = document.createElement("li");
         numberElement.innerText = number;
-        numberElement.classList.add("number" + number);
 
         return numberElement;
       };
@@ -30,33 +29,35 @@
         containerElement.appendChild(numberElement);
       };
 
-      const generateClassName = (maxNumber) => ".number" + maxNumber.toString()
-
-      const endOfInputs = (numbers) => {
+      const determineHighlightNumberAndHighlight = (numbers) => {
         const maxNumber = Math.max(...numbers);
-        const className = generateClassName(maxNumber);
+        const indexOfMaxNumber = numbers.indexOf(maxNumber);
+              
+        const containerElement = getContainerElement();
+        const elementToHighlight = containerElement.childNodes[indexOfMaxNumber];
         
-        const elementToHighlight = document.querySelector(className);
         elementToHighlight.classList.add("highlight");
       };
 
-      const main = ([...numbers]) => {
+      const highlightHighestNumber = ([...numbers]) => {
         delayedPrompt((number) => {
           addNumberToRenderList(number);
 
           if (numbers.length === 9) {
-            endOfInputs(numbers);
+            determineHighlightNumberAndHighlight(numbers);
             return;
           }
 
-          main([...numbers, number]);
+          highlightHighestNumber([...numbers, number]);
         });
       };
 
-      window.onload = () => {
+      const main = () => {
         const numbers = [];
-        main(numbers);
+        highlightHighestNumber(numbers);
       };
+
+      window.onload = main;
     </script>
   </head>
   <body>
