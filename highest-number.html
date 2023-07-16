@@ -7,58 +7,50 @@
       }
     </style>
     <script>
-      const delayedPrompt = (cb) => {
+      const delayedPrompt = (msg, cb) => {
         setTimeout(() => {
-          const number = prompt("Enter a number");
-          cb(parseInt(number) || 0);
-        }, 100);
+          const input = prompt(msg);
+          cb(+input);
+        }, 10);
       };
 
-      const getContainerElement = () => document.querySelector("#container ul");
+      const getParentContainer = () => document.querySelector("#container ul");
 
-      const createNumberElement = (number) => {
+      const createNumberContainer = (number) => {
         const numberElement = document.createElement("li");
         numberElement.innerText = number;
 
         return numberElement;
       };
+      
+      const highlightHighestNumber = (counter, maxNumber, maxNumberContainer) => {
+        delayedPrompt("", (number) => {
+          counter++;
 
-      const addToContainer = (numberElement) => {
-        const containerElement = getContainerElement();
-        containerElement.appendChild(numberElement);
-      };
+          const numberContainer = createNumberContainer(number);
+          const parentContainer = getParentContainer();
+          parentContainer.appendChild(numberContainer);
 
-      const decideMaxNumberElement = (previousElement, currentElement) => {
-        const previousNumber = parseInt(previousElement.innerText);
-        const currentNumber = parseInt(currentElement.innerText);
+          if (number > maxNumber) {
+            maxNumberContainer = numberContainer;
+            maxNumber = number;
+          }
 
-        return previousNumber < currentNumber
-          ? currentElement
-          : previousElement;
-      };
-
-      const determineHighestNumberAndHighlight = (numberElements) => {
-        const maxNumberElement = numberElements.reduce(decideMaxNumberElement);
-        maxNumberElement.classList.add("highlight");
-      };
-
-      const highlightHighestNumber = ([...numberElements]) => {
-        delayedPrompt((number) => {
-          const numberElement = createNumberElement(number);
-          addToContainer(numberElement);
-
-          if (numberElements.length === 9) {
-            determineHighestNumberAndHighlight(numberElements);
+          if (counter === 10) {
+            maxNumberContainer.classList.add("highlight");
             return;
           }
 
-          highlightHighestNumber([...numberElements, numberElement]);
+          highlightHighestNumber(counter, maxNumber, maxNumberContainer);
         });
       };
 
       const main = () => {
-        const numberElements = [];
-        highlightHighestNumber(numberElements);
+        const counter = 0;
+        const maxNumber = -Infinity;
+        const maxNumberContainer = null;
+        
+        highlightHighestNumber(counter, maxNumber, maxNumberContainer);
       };
 
       window.onload = main;
