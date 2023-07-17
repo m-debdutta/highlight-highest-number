@@ -7,60 +7,53 @@
       }
     </style>
     <script>
-      const delayedPrompt = (msg, cb) => {
+      const getNumber = (msg, cb) => {
         setTimeout(() => {
-          const input = prompt(msg);
-          cb(+input);
-        }, 10);
+          const number = prompt(msg);
+          console.log(number);
+          cb(+number);
+        }, 100);
       };
 
-      const getParentContainer = () => document.querySelector("#container ul");
+      const getContainerElement = () => document.querySelector("#container ul");
 
       const createNumberContainer = (number) => {
-        const numberElement = document.createElement("li");
-        numberElement.innerText = number;
+        const numberContainer = document.createElement("p");
+        numberContainer.innerText = number;
 
-        return numberElement;
+        return numberContainer;
       };
-      
-      const highlightHighestNumber = (counter, maxNumber, maxNumberContainer) => {
-        delayedPrompt("", (number) => {
-          counter++;
 
-          const numberContainer = createNumberContainer(number);
-          const parentContainer = getParentContainer();
-          parentContainer.appendChild(numberContainer);
+      const updateHeading = (text) => {
+        const headingContainer = document.querySelector("#heading");
+        headingContainer.innerText = "Threshold value is : " + text;
+      };
 
-          if (number > maxNumber) {
-            maxNumberContainer = numberContainer;
-            maxNumber = number;
-          }
+      const sortNumberAccordingToThreshold = (threshold) => {
 
-          if (counter === 10) {
-            maxNumberContainer.classList.add("highlight");
-            return;
-          }
+        const number = +prompt("enter a number");
 
-          highlightHighestNumber(counter, maxNumber, maxNumberContainer);
-        });
+        const numberContainer = createNumberContainer(number);
+        const aboveThreshold = document.querySelector("#above-threshold");
+        aboveThreshold.appendChild(numberContainer);
       };
 
       const main = () => {
-        const counter = 0;
-        const maxNumber = -Infinity;
-        const maxNumberContainer = null;
-        
-        highlightHighestNumber(counter, maxNumber, maxNumberContainer);
+        const threshold = +prompt("Enter threshold value");
+        updateHeading(threshold)
+        sortNumberAccordingToThreshold(threshold);
       };
 
       window.onload = main;
     </script>
   </head>
   <body>
-    <section id="page">
-      <header>Highlight the highest number</header>
+    <section>
+      <header><h1>Partitioning depending on threshold</h1></header>
       <main id="container">
-        <ul></ul>
+        <div id="heading"></div>
+        <div id="below-threshold"></div>
+        <div id="above-threshold"></div>
       </main>
     </section>
   </body>
