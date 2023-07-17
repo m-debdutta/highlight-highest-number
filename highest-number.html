@@ -2,20 +2,21 @@
   <head>
     <title>highest number</title>
     <style>
-      .highlight {
-        background-color: red;
+      #above-threshold {
+        background-color: aquamarine;
+      }
+
+      #below-threshold {
+        background-color: bisque;
       }
     </style>
     <script>
       const getNumber = (msg, cb) => {
         setTimeout(() => {
           const number = prompt(msg);
-          console.log(number);
           cb(+number);
         }, 100);
       };
-
-      const getContainerElement = () => document.querySelector("#container ul");
 
       const createNumberContainer = (number) => {
         const numberContainer = document.createElement("p");
@@ -24,24 +25,76 @@
         return numberContainer;
       };
 
+      // const addNumberToRenderList = (numberElement) => {
+      //   const containerElement = getContainerElement();
+      //   containerElement.appendChild(numberElement);
+      // };
+
+      // const decideMaxNumberElement = (previousElement, currentElement) => {
+      //   const previousNumber = Number(previousElement.innerText);
+      //   const currentNumber = Number(currentElement.innerText);
+
+      //   return previousNumber < currentNumber
+      //     ? currentElement
+      //     : previousElement;
+      // };
+
+      // const determineHighlightNumberAndHighlight = (numberElements) => {
+      //   const maxNumberElement = numberElements.reduce(decideMaxNumberElement);
+      //   maxNumberElement.classList.add("highlight");
+      // };
+
+      // const highlightHighestNumber = ([...numberElements]) => {
+      //   delayedPrompt((number) => {
+      //     const numberElement = createNumberElement(number);
+      //     addNumberToRenderList(numberElement);
+
+      //     if (numberElements.length === 9) {
+      //       determineHighlightNumberAndHighlight(numberElements);
+      //       return;
+      //     }
+
+      //     highlightHighestNumber([...numberElements, numberElement]);
+      //   });
+      // };
+
       const updateHeading = (text) => {
         const headingContainer = document.querySelector("#heading");
         headingContainer.innerText = "Threshold value is : " + text;
       };
 
-      const sortNumberAccordingToThreshold = (threshold) => {
-
-        const number = +prompt("enter a number");
-
-        const numberContainer = createNumberContainer(number);
+      const addToAboveThresholdList = (numberContainer) => {
         const aboveThreshold = document.querySelector("#above-threshold");
         aboveThreshold.appendChild(numberContainer);
       };
 
+      const addToBelowThresholdList = (numberContainer) => {
+        const aboveThreshold = document.querySelector("#below-threshold");
+        aboveThreshold.appendChild(numberContainer);
+      };
+
+      const partitionNumberAccordingToThreshold = (threshold, numberCount) => {
+        if (numberCount === 0) return;
+
+        getNumber("enter a number", (number) => {
+          const numberContainer = createNumberContainer(number);
+
+          if (number > threshold) {
+            addToAboveThresholdList(numberContainer);
+          } else {
+            addToBelowThresholdList(numberContainer);
+          }
+
+          partitionNumberAccordingToThreshold(threshold, numberCount - 1);
+        });
+      };
+
       const main = () => {
-        const threshold = +prompt("Enter threshold value");
-        updateHeading(threshold)
-        sortNumberAccordingToThreshold(threshold);
+        const numbers = { aboveThreshold: [], belowThreshold: [] };
+        const numberCount = 10;
+        const threshold = +prompt("Enter threshold");
+        updateHeading(threshold);
+        partitionNumberAccordingToThreshold(threshold, numberCount);
       };
 
       window.onload = main;
