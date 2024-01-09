@@ -18,8 +18,8 @@
         }, 100);
       };
 
-      const createNumberContainer = (number) => {
-        const numberContainer = document.createElement("p");
+      const createNumberElement = (number) => {
+        const numberContainer = document.createElement("li");
         numberContainer.innerText = number;
 
         return numberContainer;
@@ -58,43 +58,100 @@
       //   });
       // };
 
-      const updateHeading = (text) => {
-        const headingContainer = document.querySelector("#heading");
-        headingContainer.innerText = "Threshold value is : " + text;
+      const createAboveThresholdList = () => {
+        const aboveThresholdList = document.createElement("ul");
+        const aboveThresholdBlock = document.querySelector("#above-threshold");
+        aboveThresholdBlock.appendChild(aboveThresholdList);
+
+        return aboveThresholdList;
       };
 
-      const addToAboveThresholdList = (numberContainer) => {
-        const aboveThreshold = document.querySelector("#above-threshold");
-        aboveThreshold.appendChild(numberContainer);
+      const createBelowThresholdList = () => {
+        const belowThresholdList = document.createElement("ul");
+        const belowThresholdBlock = document.querySelector("#below-threshold");
+        belowThresholdBlock.appendChild(belowThresholdList);
+
+        return belowThresholdList;
       };
 
-      const addToBelowThresholdList = (numberContainer) => {
-        const aboveThreshold = document.querySelector("#below-threshold");
-        aboveThreshold.appendChild(numberContainer);
+      const display = (threshold) => {
+        const headingContainerList = document.querySelector("#heading");
+        headingContainerList.innerText = "Threshold value is : " + threshold;
       };
 
-      const partitionNumberAccordingToThreshold = (threshold, numberCount) => {
-        if (numberCount === 0) return;
+      const addToAboveThresholdList = (number) => {
+        const numberElement = createNumberElement(number);
+        const aboveThresholdList = createAboveThresholdList();
+        aboveThresholdList.appendChild(numberElement);
+      };
+
+      const addToBelowThresholdList = (number) => {
+        const numberElement = createNumberElement(number);
+        const aboveThreshold = createBelowThresholdList();
+        aboveThreshold.appendChild(numberElement);
+      };
+
+      const sortAscending = ([...numbers]) => numbers.sort((a, b) => a - b);
+
+      const addNumbers = (aboveThresholdNumbers, belowThresholdNumbers) => {
+        if (aboveThresholdNumbers.length !== 0) {
+          const aboveThresholdBlock =
+            document.querySelector("#above-threshold");
+          aboveThresholdBlock.innerText = "Numbers above threshold";
+        }
+
+        if (belowThresholdNumbers.length !== 0) {
+          const belowThresholdBlock =
+            document.querySelector("#below-threshold");
+          belowThresholdBlock.innerText = "Numbers below threshold";
+        }
+
+        aboveThresholdNumbers.forEach(addToAboveThresholdList);
+        belowThresholdNumbers.forEach(addToBelowThresholdList);
+      };
+
+      const removeAllNumbers = () => {
+        const elementToRemove = document.querySelectorAll("ul");
+        elementToRemove.forEach((element) => element.remove());
+      };
+
+      const partitionNumbers = (
+        threshold,
+        remainingNumber,
+        [...aboveThresholdNumbers] = [],
+        [...belowThresholdNumbers] = []
+      ) => {
+        if (remainingNumber === 0) {
+          return;
+        }
 
         getNumber("enter a number", (number) => {
-          const numberContainer = createNumberContainer(number);
-
           if (number > threshold) {
-            addToAboveThresholdList(numberContainer);
+            aboveThresholdNumbers.push(number);
+            aboveThresholdNumbers = sortAscending(aboveThresholdNumbers);
           } else {
-            addToBelowThresholdList(numberContainer);
+            belowThresholdNumbers.push(number);
+            belowThresholdNumbers = sortAscending(belowThresholdNumbers);
           }
 
-          partitionNumberAccordingToThreshold(threshold, numberCount - 1);
+          removeAllNumbers();
+          addNumbers(aboveThresholdNumbers, belowThresholdNumbers);
+
+          partitionNumbers(
+            threshold,
+            remainingNumber - 1,
+            aboveThresholdNumbers,
+            belowThresholdNumbers
+          );
         });
       };
 
       const main = () => {
-        const numbers = { aboveThreshold: [], belowThreshold: [] };
-        const numberCount = 10;
-        const threshold = +prompt("Enter threshold");
-        updateHeading(threshold);
-        partitionNumberAccordingToThreshold(threshold, numberCount);
+        const remainingNumber = 4;
+        getNumber("Enter threshold", (threshold) => {
+          display(threshold);
+          partitionNumbers(threshold, remainingNumber);
+        });
       };
 
       window.onload = main;
